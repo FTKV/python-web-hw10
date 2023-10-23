@@ -36,7 +36,10 @@
                 <li>
                     <i>{{ quote.quote }}</i>
                     <p><a href="{% url 'quotes_app:author_info' quote.author.id %}">{{ quote.author }}</a></p>
-                    <p>Tags: <small> {{ quote.tags|tags }} </small></p>
+                    {% if quote.tags|tags %}
+                        <p>Tags: <small> {{ quote.tags|tags }} </small></p>
+                    {% endif %}
+                    <br>
                 </li>
             </ul>
             {% endfor %}
