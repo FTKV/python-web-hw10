@@ -1,3 +1,5 @@
+import re
+
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render, get_object_or_404
 
@@ -16,6 +18,7 @@ def add_author(request):
         form = AuthorForm(request.POST)
         if form.is_valid():
             author = form.save(commit=False)
+            author.born_location = "in " + re.sub("^in ", "", author.born_location, flags=re.IGNORECASE)
             author.added_by = request.user
             author.save()
             return redirect(to='quotes_app:main')
