@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Author(models.Model):
-    fullname = models.CharField(max_length=150, null=False)
+    fullname = models.CharField(max_length=150, null=False, unique=True)
     born_date = models.DateField(null=False)
     born_location = models.CharField(max_length=150, null=False)
     description = models.CharField(max_length=10000, null=False)
@@ -25,7 +25,7 @@ class Tag(models.Model):
     
 
 class Quote(models.Model):
-    quote = models.CharField(max_length=10000, null=False)
+    quote = models.CharField(max_length=10000, null=False, unique=True)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     tags = models.ManyToManyField(Tag)
     created_at = models.DateTimeField(auto_now_add=True)
