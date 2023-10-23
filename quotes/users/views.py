@@ -43,8 +43,6 @@ def logoutuser(request):
     return redirect(to='quotes_app:main')
 
 
-...
-
 @login_required
 def profile(request):
     if request.method == 'POST':
