@@ -12,7 +12,7 @@
     </div>
     <div style="padding: 10px">
         <label> Select author:
-            <select name="authors">
+            <select name="authors" required>
                 <option disabled selected value> -- select an option -- </option>
                 {% for author in authors %}
                 <option value="{{author.fullname}}">{{author.fullname}}</option>
@@ -35,4 +35,5 @@
         <button type="reset" class="secondary">Reset</button>
     </div>
 </form>
+
 {% endblock %}

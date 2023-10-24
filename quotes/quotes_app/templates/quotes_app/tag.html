@@ -2,18 +2,56 @@
 
 {% block content %}
 
-<form method="POST" action="{% url 'quotes_app:add_tag' %}">
-    {% csrf_token %}
-    <div style="padding: 10px">
-        <label>Enter the tag's title:
-            {{form.title}}
-        </label>
-        <span>{{ form.errors.title }}</span>
-    </div>
-    <div class="grid">
-        <button type="submit">Submit</button>
-        <button type="reset" class="secondary">Reset</button>
-    </div>
-</form>
+<nav style="margin-bottom: 20px; border-bottom: 2px solid; padding-left: 30px">
+    {% if user.is_authenticated %}
+        <ul>
+            <li><a href="{% url 'quotes_app:add_author' %}" role="button">Add author</a></li>
+            <li><a href="{% url 'quotes_app:add_quote' %}" role="button">Add quote</a></li>
+            <li><a href="{% url 'quotes_app:add_tag' %}" role="button">Add tag</a></li>
+        </ul>
+        <ul>
+            <li>Welcome <b>{{ user.username }}!</b></li>
+            <li><a href="{% url 'users:profile' %}" role="button">Profile</a></li>
+            <li><a href="{% url 'users:logout' %}" role="button">Logout</a></li>
+        </ul>
+    {% else %}
+        <ul>
+            <li><a href="{% url 'users:signup' %}" role="button">Sign Up</a></li>
+            <li><a href="{% url 'users:login' %}" role="button">Login</a></li>
+        </ul>
+    {% endif %}
+</nav>
+{% if quote_tags_list %}
+    {% for quote, tags in quote_tags_list %}
+    <ul>
+        <li>
+            <i>{{ quote.quote }}</i>
+            <p><a href="{% url 'quotes_app:author_info' quote.author.id %}">{{ quote.author }}</a></p>
+            {% if tags %}
+                <p>Tags: 
+                    <small> 
+                        {% for tag in tags %}
+                            <a href="{% url 'quotes_app:tag' tag.title %}">#{{ tag.title }}</a>
+                        {% endfor %}
+                    </small>
+                </p>
+            {% endif %}
+            <br>
+        </li>
+    </ul>
+    {% endfor %}
+{% else %}
+No quotes found!<p></p>
+{% endif %}
+{% if previous_page_id or next_page_id%}
+<ul>
+    {% if previous_page_id%}
+        <span style="float:left;"><a href="{% url 'quotes_app:tag_' tag_title previous_page_id %}" role="button"><span aria-hidden="true">←</span> Previous</a></span>
+    {% endif %}
+    {% if next_page_id%}
+        <span style="float:right;"><a href="{% url 'quotes_app:tag_' tag_title next_page_id %}" role="button">Next <span aria-hidden="true">→</span></a></span>
+    {% endif %}
+</ul>
+{% endif %}
 
 {% endblock %}

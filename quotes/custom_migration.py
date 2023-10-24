@@ -1,5 +1,6 @@
 from datetime import datetime
 import os
+import re
 
 import django
 from mongoengine import connect, Document, StringField, ListField, ReferenceField, CASCADE
@@ -40,7 +41,7 @@ if __name__ == '__main__':
         author = quotes_app.models.Author()
         author.fullname = author_in_mongo.fullname
         author.born_date = datetime.strptime(author_in_mongo.born_date, "%B %d, %Y")
-        author.born_location = author_in_mongo.born_location
+        author.born_location = re.sub("^in ", "", author_in_mongo.born_location, flags=re.IGNORECASE)
         author.description = author_in_mongo.description
         author.save()
 
@@ -49,7 +50,7 @@ if __name__ == '__main__':
         quote.quote = quote_in_mongo.quote
         quote.author = quotes_app.models.Author.objects.filter(fullname=quote_in_mongo.author.fullname).first()
         quote.save()
-        
+
         for tag_in_mongo in quote_in_mongo.tags:
             tag = quotes_app.models.Tag()
             tag.title = tag_in_mongo
@@ -58,5 +59,9 @@ if __name__ == '__main__':
                     tag.save()
                 tag = quotes_app.models.Tag.objects.filter(title=tag_in_mongo).first()
                 quote.tags.add(tag)
+                
+    tag = quotes_app.models.Tag.objects.filter(title="simile").first()
+    tag.title = "smile"
+    tag.save()
 
     print("Done")

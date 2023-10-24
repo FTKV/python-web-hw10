@@ -1,50 +1,57 @@
-{% load extract_tags %}
-<!DOCTYPE html>
-<html lang="en">
+{% extends "quotes_app/base.html" %}
 
-<head>
-    <meta charset="UTF-8" />
-    <title>Quotes</title>
-    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css" />
-</head>
+{% block content %}
 
-<body>
-    <main class="container">
-        <nav style="margin-bottom: 20px; border-bottom: 2px solid; padding-left: 30px">
-            {% if user.is_authenticated %}
-            <ul>
-                <li><a href="{% url 'quotes_app:add_author' %}" role="button">Add author</a></li>
-                <li><a href="{% url 'quotes_app:add_quote' %}" role="button">Add quote</a></li>
-                <li><a href="{% url 'quotes_app:add_tag' %}" role="button">Add tag</a></li>
-            </ul>
-            <ul>
-                <li>Welcome <b>{{ user.username }}!</b></li>
-                <li><a href="{% url 'users:profile' %}" role="button">Profile</a></li>
-                <li><a href="{% url 'users:logout' %}" role="button">Logout</a></li>
-            </ul>
-            {% else %}
-            <ul>
-                <li><a href="{% url 'users:signup' %}" role="button">Sign Up</a></li>
-                <li><a href="{% url 'users:login' %}" role="button">Login</a></li>
-            </ul>
+<nav style="margin-bottom: 20px; border-bottom: 2px solid; padding-left: 30px">
+    {% if user.is_authenticated %}
+        <ul>
+            <li><a href="{% url 'quotes_app:add_author' %}" role="button">Add author</a></li>
+            <li><a href="{% url 'quotes_app:add_quote' %}" role="button">Add quote</a></li>
+            <li><a href="{% url 'quotes_app:add_tag' %}" role="button">Add tag</a></li>
+        </ul>
+        <ul>
+            <li>Welcome <b>{{ user.username }}!</b></li>
+            <li><a href="{% url 'users:profile' %}" role="button">Profile</a></li>
+            <li><a href="{% url 'users:logout' %}" role="button">Logout</a></li>
+        </ul>
+    {% else %}
+        <ul>
+            <li><a href="{% url 'users:signup' %}" role="button">Sign Up</a></li>
+            <li><a href="{% url 'users:login' %}" role="button">Login</a></li>
+        </ul>
+    {% endif %}
+</nav>
+{% if quote_tags_list %}
+    {% for quote, tags in quote_tags_list %}
+    <ul>
+        <li>
+            <i>{{ quote.quote }}</i>
+            <p><a href="{% url 'quotes_app:author_info' quote.author.id %}">{{ quote.author }}</a></p>
+            {% if tags %}
+                <p>Tags: 
+                    <small> 
+                        {% for tag in tags %}
+                            <a href="{% url 'quotes_app:tag' tag.title %}">#{{ tag.title }}</a>
+                        {% endfor %}
+                    </small>
+                </p>
             {% endif %}
-        </nav>
+            <br>
+        </li>
+    </ul>
+    {% endfor %}
+{% else %}
+No quotes found!<p></p>
+{% endif %}
+{% if previous_page_id or next_page_id%}
+<ul>
+    {% if previous_page_id%}
+        <span style="float:left;"><a href="{% url 'quotes_app:main_' previous_page_id %}" role="button"><span aria-hidden="true">←</span> Previous</a></span>
+    {% endif %}
+    {% if next_page_id%}
+        <span style="float:right;"><a href="{% url 'quotes_app:main_' next_page_id %}" role="button">Next <span aria-hidden="true">→</span></a></span>
+    {% endif %}
+</ul>
+{% endif %}
 
-        {% if quotes %}
-            {% for quote in quotes %}
-            <ul>
-                <li>
-                    <i>{{ quote.quote }}</i>
-                    <p><a href="{% url 'quotes_app:author_info' quote.author.id %}">{{ quote.author }}</a></p>
-                    {% if quote.tags|tags %}
-                        <p>Tags: <small> {{ quote.tags|tags }} </small></p>
-                    {% endif %}
-                    <br>
-                </li>
-            </ul>
-            {% endfor %}
-        {% endif %}
-    </main>
-</body>
-
-</html>
+{% endblock %}
