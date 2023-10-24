@@ -43,12 +43,12 @@
 {% else %}
 No quotes found!<p></p>
 {% endif %}
-{% if previous_page_id or next_page_id%}
+{% if previous_page_id or next_page_id %}
 <ul>
-    {% if previous_page_id%}
+    {% if previous_page_id %}
         <span style="float:left;"><a href="{% url 'quotes_app:tag_' tag_title previous_page_id %}" role="button"><span aria-hidden="true">←</span> Previous</a></span>
     {% endif %}
-    {% if next_page_id%}
+    {% if next_page_id %}
         <span style="float:right;"><a href="{% url 'quotes_app:tag_' tag_title next_page_id %}" role="button">Next <span aria-hidden="true">→</span></a></span>
     {% endif %}
 </ul>
