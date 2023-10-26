@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django_hybrid_attributes import hybrid_property, HybridQuerySet
 
 # Create your models here.
 class Author(models.Model):
@@ -9,6 +10,15 @@ class Author(models.Model):
     description = models.CharField(max_length=10000, null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     added_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    objects = HybridQuerySet.as_manager()
+
+    @hybrid_property
+    def fullname_url(self):
+        return self.fullname.replace(" ", "-")
+    
+    @fullname_url.expression
+    def fullname_url(cls):
+        return models.functions.Replace("fullname", models.Value(" "), models.Value("-"))
 
     def __str__(self):
         return f"{self.fullname}"

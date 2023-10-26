@@ -8,10 +8,10 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.11"
 django = "^4.2.6"
+django-hybrid-attributes = "^0.1.0"
 psycopg2 = "^2.9.9"
 mongoengine = "^0.27.0"
 pillow = "^10.1.0"
-
 
 [build-system]
 requires = ["poetry-core"]

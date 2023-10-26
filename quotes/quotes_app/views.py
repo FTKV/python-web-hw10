@@ -88,8 +88,8 @@ def add_quote(request):
     return render(request, 'quotes_app/add_quote.html', {"authors": authors, "tags": tags, 'form': QuoteForm()})
 
 
-def author_info(request, author_id):
-    author = get_object_or_404(Author, pk=author_id)
+def author_info(request, author_fullname_url):
+    author = Author.objects.filter(Author.fullname_url == author_fullname_url).first()
     return render(request, 'quotes_app/author_info.html', {'author': author})
 
 
