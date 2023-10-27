@@ -76,7 +76,6 @@ def add_quote(request):
         form = QuoteForm(request.POST)
         if form.is_valid():
             new_quote = form.save(commit=False)
-            print(request.POST)
             new_quote.author = Author.objects.filter(full_name=request.POST.getlist('authors')[0]).first()
             new_quote.added_by = request.user
             new_quote.save()
