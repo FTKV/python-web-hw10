@@ -9,14 +9,14 @@ class DateInput(DateInput):
 
 class AuthorForm(ModelForm):
 
-    fullname = CharField(min_length=2, max_length=150, required=True, widget=TextInput())
+    full_name = CharField(min_length=2, max_length=150, required=True, widget=TextInput())
     born_date = DateField(required=True, widget=DateInput())
     born_location = CharField(min_length=2, max_length=150, required=True, widget=TextInput())
     description = CharField(min_length=10, max_length=10000, required=True, widget=Textarea())
 
     class Meta:
         model = Author
-        fields = ['fullname', 'born_date', 'born_location', 'description']
+        fields = ['full_name', 'born_date', 'born_location', 'description']
 
 
 class TagForm(ModelForm):

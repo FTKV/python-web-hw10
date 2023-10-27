@@ -2,13 +2,13 @@
 
 {% block content %}
 
-<form method="POST" action="{% url 'quotes_app:add_author' %}">
+<form method="POST" action="{% url 'quotes_app:add-author' %}">
     {% csrf_token %}
     <div style="padding: 10px">
         <label>Enter the author's full name:
-            {{form.fullname}}
+            {{form.full_name}}
         </label>
-        <span>{{ form.errors.fullname }}</span>
+        <span>{{ form.errors.full_name }}</span>
     </div>
     <div style="padding: 10px">
         <label>Enter the author's born date:

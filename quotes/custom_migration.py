@@ -39,7 +39,7 @@ if __name__ == '__main__':
 
     for author_in_mongo in authors_in_mongo:
         author = quotes_app.models.Author()
-        author.fullname = author_in_mongo.fullname
+        author.full_name = author_in_mongo.fullname
         author.born_date = datetime.strptime(author_in_mongo.born_date, "%B %d, %Y")
         author.born_location = re.sub("^in ", "", author_in_mongo.born_location, flags=re.IGNORECASE)
         author.description = author_in_mongo.description
@@ -48,7 +48,7 @@ if __name__ == '__main__':
     for quote_in_mongo in quotes_in_mongo:
         quote = quotes_app.models.Quote()
         quote.quote = quote_in_mongo.quote
-        quote.author = quotes_app.models.Author.objects.filter(fullname=quote_in_mongo.author.fullname).first()
+        quote.author = quotes_app.models.Author.objects.filter(full_name=quote_in_mongo.author.fullname).first()
         quote.save()
 
         for tag_in_mongo in quote_in_mongo.tags:
@@ -63,5 +63,10 @@ if __name__ == '__main__':
     tag = quotes_app.models.Tag.objects.filter(title="simile").first()
     tag.title = "smile"
     tag.save()
+
+    tags = quotes_app.models.Tag.objects.all()
+    for tag in tags:
+        tag.title = tag.title.replace("#", "")
+        tag.save()
 
     print("Done")

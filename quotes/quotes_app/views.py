@@ -60,6 +60,7 @@ def add_tag(request):
         if form.is_valid():
             tag = form.save(commit=False)
             tag.added_by = request.user
+            tag.title = tag.title.replace("#", "")
             tag.save()
             return redirect(to='quotes_app:main')
         else:
@@ -76,7 +77,7 @@ def add_quote(request):
         if form.is_valid():
             new_quote = form.save(commit=False)
             print(request.POST)
-            new_quote.author = Author.objects.filter(fullname=request.POST.getlist('authors')[0]).first()
+            new_quote.author = Author.objects.filter(full_name=request.POST.getlist('authors')[0]).first()
             new_quote.added_by = request.user
             new_quote.save()
             choice_tags = Tag.objects.filter(title__in=request.POST.getlist('tags'))
@@ -88,9 +89,9 @@ def add_quote(request):
     return render(request, 'quotes_app/add_quote.html', {"authors": authors, "tags": tags, 'form': QuoteForm()})
 
 
-def author_info(request, author_fullname_url):
-    author = Author.objects.filter(Author.fullname_url == author_fullname_url).first()
-    return render(request, 'quotes_app/author_info.html', {'author': author})
+def author(request, author_full_name_url):
+    author = Author.objects.filter(Author.full_name_url == author_full_name_url).first()
+    return render(request, 'quotes_app/author.html', {'author': author})
 
 
 def tag(request, tag_title, page_id):

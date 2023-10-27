@@ -5,9 +5,9 @@
 <nav style="margin-bottom: 20px; border-bottom: 2px solid; padding-left: 30px">
     {% if user.is_authenticated %}
         <ul>
-            <li><a href="{% url 'quotes_app:add_author' %}" role="button">Add author</a></li>
-            <li><a href="{% url 'quotes_app:add_quote' %}" role="button">Add quote</a></li>
-            <li><a href="{% url 'quotes_app:add_tag' %}" role="button">Add tag</a></li>
+            <li><a href="{% url 'quotes_app:add-author' %}" role="button">Add author</a></li>
+            <li><a href="{% url 'quotes_app:add-quote' %}" role="button">Add quote</a></li>
+            <li><a href="{% url 'quotes_app:add-tag' %}" role="button">Add tag</a></li>
         </ul>
         <ul>
             <li>Welcome <b>{{ user.username }}!</b></li>
@@ -26,7 +26,7 @@
     <ul>
         <li>
             <i>{{ quote.quote }}</i>
-            <p><a href="{% url 'quotes_app:author_info' quote.author.fullname_url %}">{{ quote.author }}</a></p>
+            <p><a href="{% url 'quotes_app:author' quote.author.full_name_url %}">{{ quote.author }}</a></p>
             {% if tags %}
                 <p>Tags: 
                     <small> 
@@ -46,10 +46,10 @@ No quotes found!<p></p>
 {% if previous_page_id or next_page_id %}
 <ul>
     {% if previous_page_id %}
-        <span style="float:left;"><a href="{% url 'quotes_app:main_' previous_page_id %}" role="button"><span aria-hidden="true">←</span> Previous</a></span>
+        <span style="float:left;"><a href="{% url 'quotes_app:main-page-id' previous_page_id %}" role="button"><span aria-hidden="true">←</span> Previous</a></span>
     {% endif %}
     {% if next_page_id %}
-        <span style="float:right;"><a href="{% url 'quotes_app:main_' next_page_id %}" role="button">Next <span aria-hidden="true">→</span></a></span>
+        <span style="float:right;"><a href="{% url 'quotes_app:main-page-id' next_page_id %}" role="button">Next <span aria-hidden="true">→</span></a></span>
     {% endif %}
 </ul>
 {% endif %}

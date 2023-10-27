@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<form method="POST" action="{% url 'quotes_app:add_quote' %}">
+<form method="POST" action="{% url 'quotes_app:add-quote' %}">
     {% csrf_token %}
     <div style="padding: 10px">
         <label> Quote:
@@ -15,7 +15,7 @@
             <select name="authors" required>
                 <option disabled selected value> -- select an option -- </option>
                 {% for author in authors %}
-                <option value="{{author.fullname}}">{{author.fullname}}</option>
+                <option value="{{author.full_name}}">{{author.full_name}}</option>
                 {% endfor %}
             </select>
         </label>
@@ -23,7 +23,7 @@
     </div>
     <div style="padding: 10px">
         <label> Select tags:
-            <select name="tags" multiple="multiple" required>
+            <select name="tags" multiple="multiple">
                 {% for tag in tags %}
                 <option value="{{tag.title}}">{{tag.title}}</option>
                 {% endfor %}

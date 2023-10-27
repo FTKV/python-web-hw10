@@ -4,7 +4,7 @@ from django_hybrid_attributes import hybrid_property, HybridQuerySet
 
 # Create your models here.
 class Author(models.Model):
-    fullname = models.CharField(max_length=150, null=False, unique=True)
+    full_name = models.CharField(max_length=150, null=False, unique=True)
     born_date = models.DateField(null=False)
     born_location = models.CharField(max_length=150, null=False)
     description = models.CharField(max_length=10000, null=False)
@@ -13,15 +13,15 @@ class Author(models.Model):
     objects = HybridQuerySet.as_manager()
 
     @hybrid_property
-    def fullname_url(self):
-        return self.fullname.replace(" ", "-")
+    def full_name_url(self):
+        return self.full_name.replace(" ", "-")
     
-    @fullname_url.expression
-    def fullname_url(cls):
-        return models.functions.Replace("fullname", models.Value(" "), models.Value("-"))
+    @full_name_url.expression
+    def full_name_url(cls):
+        return models.functions.Replace("full_name", models.Value(" "), models.Value("-"))
 
     def __str__(self):
-        return f"{self.fullname}"
+        return f"{self.full_name}"
     
 
 class Tag(models.Model):
