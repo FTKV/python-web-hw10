@@ -1,9 +1,10 @@
 from django.urls import path
 
 from . import views
+from .apps import QuotesAppConfig
 
 
-app_name = 'quotes_app'
+app_name = QuotesAppConfig.name
 
 
 urlpatterns = [
