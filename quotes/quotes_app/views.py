@@ -33,74 +33,102 @@ def get_quote_tags_list_per_page_and_page_ids(quotes, page_id):
 # Create your views here.
 def main(request, page_id):
     quotes = Quote.objects.all()
-    quote_tags_list, previous_page_id, next_page_id = get_quote_tags_list_per_page_and_page_ids(quotes, page_id)
-    context = {"quote_tags_list": quote_tags_list, "previous_page_id": previous_page_id, "next_page_id": next_page_id}
-    return render(request, 'quotes_app/index.html', context)
+    (
+        quote_tags_list,
+        previous_page_id,
+        next_page_id,
+    ) = get_quote_tags_list_per_page_and_page_ids(quotes, page_id)
+    context = {
+        "quote_tags_list": quote_tags_list,
+        "previous_page_id": previous_page_id,
+        "next_page_id": next_page_id,
+    }
+    return render(request, "quotes_app/index.html", context)
 
 
 @login_required
 def add_author(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = AuthorForm(request.POST)
         if form.is_valid():
             author = form.save(commit=False)
-            author.born_location = re.sub("^in ", "", author.born_location, flags=re.IGNORECASE)
+            author.born_location = re.sub(
+                "^in ", "", author.born_location, flags=re.IGNORECASE
+            )
             author.added_by = request.user
             author.save()
-            return redirect(to='quotes_app:main')
+            return redirect(to="quotes_app:main")
         else:
-            return render(request, 'quotes_app/add_author.html', {'form': form})
-    return render(request, 'quotes_app/add_author.html', {'form': AuthorForm()})
+            return render(request, "quotes_app/add_author.html", {"form": form})
+    return render(request, "quotes_app/add_author.html", {"form": AuthorForm()})
 
 
 @login_required
 def add_tag(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = TagForm(request.POST)
         if form.is_valid():
             tag = form.save(commit=False)
             tag.added_by = request.user
             tag.title = tag.title.replace("#", "")
             tag.save()
-            return redirect(to='quotes_app:main')
+            return redirect(to="quotes_app:main")
         else:
-            return render(request, 'quotes_app/add_tag.html', {'form': form})
-    return render(request, 'quotes_app/add_tag.html', {'form': TagForm()})
+            return render(request, "quotes_app/add_tag.html", {"form": form})
+    return render(request, "quotes_app/add_tag.html", {"form": TagForm()})
 
 
 @login_required
 def add_quote(request):
     authors = Author.objects.all()
     tags = Tag.objects.all()
-    if request.method == 'POST':
+    if request.method == "POST":
         form = QuoteForm(request.POST)
         if form.is_valid():
             new_quote = form.save(commit=False)
-            new_quote.author = Author.objects.filter(full_name=request.POST.getlist('authors')[0]).first()
             new_quote.added_by = request.user
             new_quote.save()
-            choice_tags = Tag.objects.filter(title__in=request.POST.getlist('tags'))
+            choice_tags = Tag.objects.filter(id__in=request.POST.getlist("tags"))
             for tag in choice_tags.iterator():
                 new_quote.tags.add(tag)
-            return redirect(to='quotes_app:main')
+            return redirect(to="quotes_app:main")
         else:
-            return render(request, 'quotes_app/add_quote.html', {"authors": authors, "tags": tags, 'form': form})
-    return render(request, 'quotes_app/add_quote.html', {"authors": authors, "tags": tags, 'form': QuoteForm()})
+            return render(
+                request,
+                "quotes_app/add_quote.html",
+                {"authors": authors, "tags": tags, "form": form},
+            )
+    return render(
+        request,
+        "quotes_app/add_quote.html",
+        {"authors": authors, "tags": tags, "form": QuoteForm()},
+    )
 
 
 def author(request, author_full_name_url):
     author = Author.objects.filter(Author.full_name_url == author_full_name_url).first()
-    return render(request, 'quotes_app/author.html', {'author': author})
+    return render(request, "quotes_app/author.html", {"author": author})
 
 
 def tag(request, tag_title, page_id):
     tag = get_object_or_404(Tag, title=tag_title)
     quotes = Quote.objects.filter(tags__in=[tag])
-    quote_tags_list, previous_page_id, next_page_id = get_quote_tags_list_per_page_and_page_ids(quotes, page_id)
-    context = {"quote_tags_list": quote_tags_list, "previous_page_id": previous_page_id, "next_page_id": next_page_id, "tag_title": tag_title}
-    return render(request, 'quotes_app/tag.html', context)
+    (
+        quote_tags_list,
+        previous_page_id,
+        next_page_id,
+    ) = get_quote_tags_list_per_page_and_page_ids(quotes, page_id)
+    context = {
+        "quote_tags_list": quote_tags_list,
+        "previous_page_id": previous_page_id,
+        "next_page_id": next_page_id,
+        "tag_title": tag_title,
+    }
+    return render(request, "quotes_app/tag.html", context)
 
 
 def top_tags(request):
-    tags = Tag.objects.annotate(num_quote=Count("quote")).order_by("-num_quote")[:NUMBER_OF_TOP_TAGS]
-    return render(request, 'quotes_app/top_tags.html', {"tags": tags})
+    tags = Tag.objects.annotate(num_quote=Count("quote")).order_by("-num_quote")[
+        :NUMBER_OF_TOP_TAGS
+    ]
+    return render(request, "quotes_app/top_tags.html", {"tags": tags})

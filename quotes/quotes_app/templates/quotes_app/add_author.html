@@ -6,25 +6,25 @@
     {% csrf_token %}
     <div style="padding: 10px">
         <label>Enter the author's full name:
-            {{form.full_name}}
+            {{ form.full_name }}
         </label>
         <span>{{ form.errors.full_name }}</span>
     </div>
     <div style="padding: 10px">
         <label>Enter the author's born date:
-            {{form.born_date}}
+            {{ form.born_date }}
         </label>
         <span>{{ form.errors.born_date }}</span>
     </div>
     <div style="padding: 10px">
         <label>Enter the author's born location:
-            {{form.born_location}}
+            {{ form.born_location }}
         </label>
         <span>{{ form.errors.born_location }}</span>
     </div>
     <div style="padding: 10px">
         <label>Enter the author's description:
-            {{form.description}}
+            {{ form.description }}
         </label>
         <span>{{ form.errors.description }}</span>
     </div>
